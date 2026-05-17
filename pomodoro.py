@@ -1,5 +1,8 @@
 import time
 
+DUREE_TRAVAIL = 5
+DUREE_PAUSE   = 2
+
 def afficherCompteARebours(temps):
     
     while temps!=0 :

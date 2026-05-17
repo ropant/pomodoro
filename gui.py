@@ -1,4 +1,10 @@
 import tkinter as tk
+from pomodoro import DUREE_TRAVAIL, DUREE_PAUSE
+
+#variable globale 
+cycle =0
+
+
 
 # ── Palette "Révisions" ────────────────────────────────────
 FOND        = "#F7F3EC"   # Crème chaud (comme une page de carnet)
@@ -12,10 +18,30 @@ BLANC       = "#FFFFFF"
 
 # ── Fonctions (à compléter ensemble) ──────────────────────
 def demarrer():
-    pass  # TODO : logique Pomodoro
+    global cycle
+    cycle+=1
+    miseAJour(DUREE_TRAVAIL)
 
+def miseAJour(temps):
+    boutonArreter.pack_forget()
+    boutonDemarrer.config(state="disabled")
+    minutes=temps//60
+    secondes=temps%60
+    temps-=1
+    labelTimer.config(text=f"{minutes}:{secondes:02d}")
+    if temps <0:
+        labelCycle.config(text=f"cycle :{cycle}")
+        boutonArreter.pack()
+        boutonDemarrer.config(state="active")
+    else:
+        racine.after(1000, lambda: miseAJour(temps))
+    
+    
 def arreter():
-    pass  # TODO : arrêter le timer
+    boutonArreter.pack_forget()
+    miseAJour(DUREE_PAUSE)
+    
+    
 
 # ── Fenêtre principale ────────────────────────────────────
 racine = tk.Tk()
@@ -72,7 +98,7 @@ labelTimer.pack(pady=(6, 4))
 # ── Numéro du cycle ───────────────────────────────────────
 labelCycle = tk.Label(
     racine,
-    text="● ○ ○ ○   Cycle 1 / 4",
+    text=f"cycle :{cycle}",
     font=("Helvetica", 9),
     fg=TEXTE_DOUX,
     bg=FOND
@@ -102,7 +128,7 @@ boutonDemarrer.pack(pady=(0, 10))
 # ── Bouton Arrêter ────────────────────────────────────────
 boutonArreter = tk.Button(
     racine,
-    text="⏹   Arrêter",
+    text="⏹Faire une pause ?",
     font=("Helvetica", 10),
     fg=TEXTE_DOUX,
     bg=FOND,
@@ -117,4 +143,5 @@ boutonArreter = tk.Button(
 boutonArreter.pack()
 
 # ── Lancer la fenêtre ─────────────────────────────────────
+boutonArreter.pack_forget()
 racine.mainloop()
