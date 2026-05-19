@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:\\\\Users\\\\arope\\\\OneDrive\\\\Bureau\\\\CODE\\\\pomodoro\" && python -m pytest tests/ -v)",
+      "Bash(cd \"C:\\\\Users\\\\arope\\\\OneDrive\\\\Bureau\\\\CODE\\\\pomodoro\" && .venv/Scripts/pip install pytest flake8 && .venv/Scripts/python -m pytest tests/ -v)"
+    ]
+  }
+}

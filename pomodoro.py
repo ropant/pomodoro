@@ -3,16 +3,19 @@ import time
 DUREE_TRAVAIL = 5
 DUREE_PAUSE   = 2
 
-def afficherCompteARebours(temps):
+def afficherCompteARebours(duree):
     
-    while temps!=0 :
-            minutes=temps//60
-            secondes=temps%60
+    while duree!=0 :
+            minutes,secondes=calCulTemps(duree)
             print(f"{minutes}:{secondes:02d}")
-            temps-=1
+            duree-=1
             time.sleep(1)
         
-
+def calCulTemps (temps):
+    minutes=temps//60
+    secondes=temps%60
+    return minutes,secondes
+     
 
 def demanderPause():
     choix = input("veux tu faire une pause ? oui/non ")
