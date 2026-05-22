@@ -1,0 +1,95 @@
+# ============================================================
+# YAML = langage de configuration base sur l'INDENTATION
+# Regles de base :
+#   - Chaque ligne = une cle: valeur (toujours un espace apres les deux-points)
+#   - L'indentation se fait avec des ESPACES (jamais des tabulations)
+#   - Le tiret "-" cree un element de liste
+#   - Le "#" commence un commentaire
+# ============================================================
+
+# --- NOM DU WORKFLOW ---
+# "name:" definit le nom affiche dans l'onglet Actions de GitHub
+name: CI
+
+# --- DECLENCHEUR ---
+# "on:" definit QUAND le workflow se lance
+# Ici : a chaque push ou pull_request sur la branche master
+on:
+  push:
+    branches: [master]       # liste entre crochets = syntaxe courte YAML
+  pull_request:
+    branches: [master]
+
+# --- JOBS ---
+# "jobs:" contient les taches a executer
+# Chaque job tourne sur une machine virtuelle independante
+jobs:
+
+  # "lint" = nom du job (tu choisis le nom que tu veux)
+  lint:
+    # "runs-on:" = quel OS utiliser pour la machine virtuelle
+    # ubuntu-latest = un serveur Linux gratuit fourni par GitHub
+    runs-on: ubuntu-latest
+
+    # "steps:" = les etapes du job, executees dans l'ordre
+    # Chaque step commence par un tiret "-"
+    steps:
+      # "uses:" = utiliser une action pre-faite par la communaute
+      # actions/checkout@v4 = telecharge ton code sur la machine virtuelle
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # "with:" = passer des parametres a une action
+      - name: Installation de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # "run:" = executer une commande shell (comme dans ton terminal)
+      - name: Installation des dependances
+        run: pip install -r requirements.txt
+
+      - name: Lint avec flake8
+        run: flake8 --max-line-length=120 --exclude=.venv .
+
+  # Deuxieme job : les tests unitaires
+  test:
+    runs-on: ubuntu-latest
+
+    # "strategy.matrix" = concept DevOps important
+    # Permet de lancer le MEME job plusieurs fois avec des valeurs differentes
+    # Ici : on teste sur 3 versions de Python en parallele
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # ${{ matrix.python-version }} = variable qui prend chaque valeur de la matrix
+      # Le job sera duplique 3 fois : une fois par version
+      - name: Installation de Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Installation des dependances
+        run: pip install -r requirements.txt
+
+      # "-v" = mode verbose, affiche le detail de chaque test
+      - name: Lancement des tests
+        run: pytest tests/ -v
+
+# ============================================================
+# RESUME DES MOTS-CLES YAML POUR GITHUB ACTIONS :
+#   name:       → nom du workflow ou d'une etape
+#   on:         → quand declencher le workflow
+#   jobs:       → liste des taches a executer
+#   runs-on:    → OS de la machine virtuelle
+#   steps:      → etapes d'un job (dans l'ordre)
+#   uses:       → utiliser une action existante
+#   with:       → parametres d'une action
+#   run:        → commande shell a executer
+#   strategy:   → configuration avancee (matrix, etc.)
+# ============================================================
