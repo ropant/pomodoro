@@ -1,4 +1,4 @@
-from pomodoro import lancerCycle, afficherCompteARebours, demanderPause
+from pomodoro import lancer_cycle
 
 if __name__ == "__main__":
-    lancerCycle()
+    lancer_cycle()

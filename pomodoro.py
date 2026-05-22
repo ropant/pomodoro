@@ -1,30 +1,31 @@
 import time
 
 DUREE_TRAVAIL = 5
-DUREE_PAUSE   = 2
+DUREE_PAUSE = 2
 
-def afficherCompteARebours(duree):
-    
-    while duree!=0 :
-            minutes,secondes=calCulTemps(duree)
-            print(f"{minutes}:{secondes:02d}")
-            duree-=1
-            time.sleep(1)
-        
-def calCulTemps (temps):
-    minutes=temps//60
-    secondes=temps%60
-    return minutes,secondes
-     
 
-def demanderPause():
+def afficher_compte_a_rebours(duree):
+    while duree != 0:
+        minutes, secondes = cal_cul_temps(duree)
+        print(f"{minutes}:{secondes:02d}")
+        duree -= 1
+        time.sleep(1)
+
+
+def cal_cul_temps(temps):
+    minutes = temps // 60
+    secondes = temps % 60
+    return minutes, secondes
+
+
+def demander_pause():
     choix = input("veux tu faire une pause ? oui/non ")
-    return choix =="oui"
+    return choix == "oui"
 
-def lancerCycle() :
+
+def lancer_cycle():
     while True:
-        afficherCompteARebours(1500)
-        veutPause=demanderPause()
-        if veutPause:
-            afficherCompteARebours(400)
-        
+        afficher_compte_a_rebours(1500)
+        veut_pause = demander_pause()
+        if veut_pause:
+            afficher_compte_a_rebours(400)
