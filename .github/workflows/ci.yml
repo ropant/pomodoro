@@ -79,7 +79,7 @@ jobs:
 
       # "-v" = mode verbose, affiche le detail de chaque test
       - name: Lancement des tests
-        run: pytest tests/ -v
+        run: PYTHONPATH=. pytest tests/ -v
 
 # ============================================================
 # RESUME DES MOTS-CLES YAML POUR GITHUB ACTIONS :
